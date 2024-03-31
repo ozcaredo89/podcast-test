@@ -16,7 +16,12 @@ jobs:
          pip install pyyaml
       - name: Run Feed Generator
         run: python feed.py
-      - name: Push Repo
+      - name: Check for Changes
+        id: check_changes
+        run: |
+          git diff --exit-code || echo "Changes found"
+      - name: Push Changes
+        if: steps.check_changes.outputs['exit_code'] == 'Changes found'
         run: | 
           git config --global user.name "ozcaredo89"
           git config --global user.email "oscar.hv89@gmail.com"
